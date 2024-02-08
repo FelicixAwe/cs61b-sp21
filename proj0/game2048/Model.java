@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Esther Xiao
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -113,6 +113,44 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+         int size = board.size();
+        // 1. NORTH
+        board.setViewingPerspective(side);
+          // Move and merge
+          // 1. high points to null while low is not => low move to high, low move forward
+          // 2. high and low not to point to null but inequal valie => high move forward
+          // 3. high and low point to same value tile => low merge to high
+          // 4. low point to null => low moves forward
+        for(int i = 0; i < size; i++){
+            int high = size - 1, low = size - 2;
+            while(low >= 0){
+              Tile lowTile = board.tile(i, low);
+              Tile highTile = board.tile(i, high);
+              if(lowTile == null) {
+                low -= 1; 
+                continue;
+              }
+              else if(low == high) {
+                low -= 1;
+              }
+              else if(highTile == null) {
+                board.move(i, high, lowTile);
+                low -= 1;
+                changed = true;
+              }
+              else if(highTile.value() != lowTile.value()){
+                high -= 1;
+              }
+              else if(highTile.value() == lowTile.value()){
+                board.move(i, high, lowTile);
+                score += board.tile(i, high).value();
+                high -= 1;
+                low -= 1;
+                changed = true;
+              }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -137,7 +175,16 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+
+        for(int i = 0; i < size; i++){
+          for(int j = 0; j < size; j++){
+            if(b.tile(i, j) == null){
+              return true;
+            }
+          }
+        }
+
         return false;
     }
 
@@ -147,7 +194,16 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+
+        for(int i = 0; i < size; i++){
+          for(int j = 0; j < size; j++){
+            if(b.tile(i, j) != null && b.tile(i, j).value() == MAX_PIECE){
+              return true;
+            }
+          }
+        }
+
         return false;
     }
 
@@ -158,9 +214,33 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+        // 1. Check if at least one empty space on the board.
+        if(Model.emptySpaceExists(b)){
+          return true;
+        }
+
+        // 2. Check for adjacent tiles with the same value
+        for(int i = 0; i < size; i++){
+          for(int j = 0; j < size; j++){
+            Tile currentTile = b.tile(i, j);
+            if(i - 1 >= 0 && i - 1 < size && currentTile.value() == b.tile(i - 1, j).value()){
+              return true;
+            }
+            if(i + 1 >= 0 && i + 1 < size && currentTile.value() == b.tile(i + 1, j).value()){
+              return true;
+            }
+            if(j - 1 >= 0 && j - 1 < size && currentTile.value() == b.tile(i, j - 1).value()){
+              return true;
+            }
+            if(j - 1 >= 0 && j - 1 < size && currentTile.value() == b.tile(i, j - 1).value()){
+              return true;
+            }
+          }
+        }
+        
         return false;
-    }
+  }
 
 
     @Override
