@@ -8,6 +8,8 @@ public class ArrayDeque<T> implements Deque<T> {
   private int nextFirst;
   private int nextLast;
 
+  private static int RFACTOR = 2;
+
   public ArrayDeque(){
     items = (T[]) new Object[8];
     size = 0;
@@ -15,25 +17,47 @@ public class ArrayDeque<T> implements Deque<T> {
     nextLast = 5;
   }
 
+  private void resize(int capacity){
+    T[] a = (T[]) new Object[capacity];
+    int oldIndex = (nextFirst + 1) % items.length;
+    for(int newIndex = 0; newIndex < size; newIndex++){
+      a[newIndex] = items[oldIndex];
+      oldIndex = (oldIndex + 1) % items.length;
+    }
+    items = a;
+    nextFirst = capacity - 1;
+    nextLast = size;
+  }
+
+  private boolean isFull(){
+    return size == items.length;
+  }
+
   public void addFirst(T item){
-    // TODO: No need to resizing
+    if (isFull()) {
+      resize(RFACTOR * items.length);
+    }
     items[nextFirst] = item;
     nextFirst = (nextFirst - 1 + items.length) % items.length;
     size++;
   }
 
   public void addLast(T item){
-    // TODO: No need to resizing
+    if (isFull()) {
+      resize(RFACTOR * items.length);
+    }
     items[nextLast] = item;
     nextLast = (nextLast + 1) % items.length;
     size++;
   }
 
   public T removeFirst(){
-    if(size() == 0){
+    if(isEmpty()){
       return null;
     }
-
+    if(size < items.length / 4 && size > 8){
+      resize(items.length / 2);
+    }
     nextFirst = (nextFirst + 1) % items.length;
     T item = items[nextFirst];
     items[nextFirst] = null;
@@ -42,8 +66,11 @@ public class ArrayDeque<T> implements Deque<T> {
   }
 
   public T removeLast(){
-    if(size() == 0){
+    if(isEmpty()){
       return null;
+    }
+    if(size < items.length / 4 && size > 8){
+      resize(items.length / 2);
     }
     nextLast = (nextLast - 1 + items.length) % items.length;
     T item = items[nextLast];
@@ -73,7 +100,6 @@ public class ArrayDeque<T> implements Deque<T> {
     System.out.println();
   }
 
-  @Override
   public Iterator<T> iterator(){
     return new ArrayListDequeIterator();
   }
