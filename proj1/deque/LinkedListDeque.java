@@ -2,23 +2,23 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
-    private Node < T > sentinel;
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
+    private Node<T> sentinel;
     private int size = 0;
 
     public LinkedListDeque() {
-        sentinel = new Node < > (null, null, null);
+        sentinel = new Node<>(null, null, null);
         sentinel.next = sentinel.prev = sentinel;
     }
     public void addFirst(T item) {
-        Node < T > newNode = new Node < > (item, sentinel, sentinel.next);
+        Node<T> newNode = new Node<>(item, sentinel, sentinel.next);
         sentinel.next.prev = newNode;
         sentinel.next = newNode;
         size++;
     }
 
     public void addLast(T item) {
-        Node < T > newNode = new Node < > (item, sentinel.prev, sentinel);
+        Node<T> newNode = new Node<>(item, sentinel.prev, sentinel);
         sentinel.prev.next = newNode;
         sentinel.prev = newNode;
         size++;
@@ -29,7 +29,7 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
     }
 
     public void printDeque() {
-        Node < T > cur = sentinel.next;
+        Node<T> cur = sentinel.next;
         while (cur != sentinel) {
             System.out.print(cur.item + " ");
             cur = cur.next;
@@ -41,7 +41,7 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
         if (isEmpty()) {
             return null;
         }
-        Node < T > prevFirst = sentinel.next;
+        Node<T> prevFirst = sentinel.next;
         prevFirst.next.prev = sentinel;
         sentinel.next = prevFirst.next;
         size--;
@@ -52,7 +52,7 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
         if (isEmpty()) {
             return null;
         }
-        Node < T > prevLast = sentinel.prev;
+        Node<T> prevLast = sentinel.prev;
         prevLast.prev.next = sentinel;
         sentinel.prev = prevLast.prev;
         size--;
@@ -65,11 +65,11 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
             return null;
         }
 
-        Iterator < T > iterator = iterator();
+        Iterator<T> iterator = iterator();
         return getRecursiveHelper(iterator, index);
     }
 
-    private T getRecursiveHelper(Iterator < T > ite, int index) {
+    private T getRecursiveHelper(Iterator<T> ite, int index) {
         T item = ite.next();
         if (index == 0) {
             return item;
@@ -82,7 +82,7 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
             return null;
         }
         T item = null;
-        Iterator < T > iterator = iterator();
+        Iterator<T> iterator = iterator();
         for (int i = 0; i <= index; i++) {
             if (iterator.hasNext()) {
                 item = iterator.next();
@@ -98,7 +98,7 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
         if (!(o instanceof Deque)) {
             return false;
         }
-        Deque < T > other = (Deque < T > ) o;
+        Deque<T> other = (Deque<T>) o;
         if (other.size() != size()) {
             return false;
         }
@@ -112,14 +112,14 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
     }
 
     @Override
-    public Iterator < T > iterator() {
+    public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
 
-    private class LinkedListDequeIterator implements Iterator < T > {
-        private Node < T > current;
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private Node<T> current;
 
-        public LinkedListDequeIterator() {
+        LinkedListDequeIterator() {
             this.current = sentinel.next;
         }
 
@@ -140,12 +140,12 @@ public class LinkedListDeque < T > implements Deque < T >, Iterable< T > {
     }
 
 
-    private static class Node < T > {
-        public T item;
-        public Node < T > next;
-        public Node < T > prev;
+    private static class Node<T> {
+        private T item;
+        public Node<T> next;
+        public Node<T> prev;
 
-        public Node(T item, Node < T > prev, Node < T > next) {
+        public Node(T item, Node<T> prev, Node<T> next) {
             this.item = item;
             this.next = next;
             this.prev = prev;
