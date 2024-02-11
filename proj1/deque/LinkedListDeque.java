@@ -95,28 +95,20 @@ public class LinkedListDeque<T> implements Deque<T> {
     if(this == o){
       return true;
     }
-    if(o instanceof LinkedListDeque){
-      LinkedListDeque<?> other = (LinkedListDeque<?>) o;
-      if(other.size() != size()){
+    if(!(o instanceof Deque)){
+      return false;
+    }
+    Deque<T> other = (Deque<T>) o;
+    if(other.size() != size()){
+      return false;
+    }
+
+    for(int i = 0; i < size; i++){
+      if(!(other.get(i).equals(this.get(i)))){
         return false;
       }
-
-
-      Iterator<T> thisIterator = this.iterator();
-      Iterator<?> otherIterator = other.iterator();
-
-      while(thisIterator.hasNext() && otherIterator.hasNext()){
-        T thisItem = thisIterator.next();
-        // Could lead to ClassCastException if the types are different
-        Object otherItem = otherIterator.next();
-
-        if(!thisItem.equals(otherItem)){
-          return false;
-        }
-      }
-      return true;
     }
-    return false;
+    return true;
   }
 
     public Iterator<T> iterator(){
