@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
   private T[] items;
   private int size;
   private int nextFirst;
@@ -111,12 +111,10 @@ public class ArrayDeque<T> implements Deque<T> {
       cur = (nextFirst + 1) % items.length;
       count = 0;
     }
-    @Override
     public boolean hasNext(){
       return count < size();
     }
 
-    @Override
     public T next(){
       if(!hasNext()){
         return null;
@@ -126,6 +124,29 @@ public class ArrayDeque<T> implements Deque<T> {
       count++;
       return item;
     }
+  }
+
+  public boolean equals(Object o){
+    if(this == o){
+      return true;
+    }
+    if(o == null){
+      return false;
+    }
+    if(!(o instanceof Deque)){
+      return false;
+    }
+    Deque<T> other = (Deque<T>) o;
+    if(other.size() != this.size()){
+      return false;
+    }
+    for(int i = 0; i < size; i++){
+      if(!(other.get(i).equals(this.get(i)))){
+        return false;
+      }
+    }
+
+    return true;
   }
 
 }
