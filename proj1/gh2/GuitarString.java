@@ -9,11 +9,11 @@ public class GuitarString {
     /** Constants. Do not change. In case you're curious, the keyword final
      * means the values cannot be changed at runtime. We'll discuss this and
      * other topics in lecture on Friday. */
-    private static final int SR = 44100;      // Sampling Rate
+    private static final int SR = 44100; // Sampling Rate
     private static final double DECAY = .996; // energy decay factor
 
     /* Buffer for storing sound data. */
-    private Deque<Double> buffer = new ArrayDeque<>();
+    private Deque < Double > buffer = new ArrayDeque < > ();
 
     /* Create a guitar string of the given frequency.  */
     public GuitarString(double frequency) {
@@ -22,8 +22,8 @@ public class GuitarString {
         //       better accuracy, use the Math.round() function before casting.
         //       Your should initially fill your buffer array with zeros.
         int capacity = (int) Math.round(SR / frequency);
-        for(int i = 0; i < capacity; i++){
-          buffer.addLast(0.0);
+        for (int i = 0; i < capacity; i++) {
+            buffer.addLast(0.0);
         }
     }
 
@@ -38,10 +38,10 @@ public class GuitarString {
         //       other. This does not mean that you need to check that the numbers
         //       are different from each other. It means you should repeatedly call
         //       Math.random() - 0.5 to generate new random numbers for each array index.
-        for(int i = 0; i < buffer.size(); i++){
-          double noise = (double)(Math.random() - 0.5);
-          buffer.removeFirst();
-          buffer.addLast(noise);
+        for (int i = 0; i < buffer.size(); i++) {
+            double noise = (double)(Math.random() - 0.5);
+            buffer.removeFirst();
+            buffer.addLast(noise);
         }
     }
 
