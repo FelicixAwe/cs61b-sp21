@@ -39,8 +39,8 @@ public class GuitarString {
         //       are different from each other. It means you should repeatedly call
         //       Math.random() - 0.5 to generate new random numbers for each array index.
         for(int i = 0; i < buffer.size(); i++){
-          double noise = Math.random() - 0.5;
-          buffer.removeLast();
+          double noise = (double)(Math.random() - 0.5);
+          buffer.removeFirst();
           buffer.addLast(noise);
         }
     }

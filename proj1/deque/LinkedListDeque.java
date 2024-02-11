@@ -69,7 +69,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     return getRecursiveHelper(iterator, index);
   }
 
-  public T getRecursiveHelper(Iterator<T> ite, int index){
+  private T getRecursiveHelper(Iterator<T> ite, int index){
     T item = ite.next();
     if(index == 0){
       return item; 
